@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="row">
+            <div class="col-lg-8  offset-lg-2">
+
+
+                <h2 class="mt-5">Face-Recognition</h2>
+                <form method="post" action="{{ url_for('tasks') }}">
+                <input type="submit" value="Stop/Start" name="stop" />
+                <input type="submit" value="Capture" name="click"/>
+                <input type="submit" value="Face Only" name="face" />
+                </form>
+
+                <img src="{{ url_for('video_feed') }}" height="80%">
+                {{student_name}}
+
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
