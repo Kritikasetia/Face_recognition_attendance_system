@@ -64,7 +64,7 @@ def attendance(name):
            time_now = datetime.now()
            tStr = time_now.strftime('%H:%M:%S')
            dStr = time_now.strftime('%d/%m/%Y')
-           f.writelines(f'{name},{tStr},{dStr}')
+           f.writelines(f'"\n"{name},{tStr},{dStr}')
 
 
 def detect_face(frame):
@@ -178,10 +178,16 @@ def tasks():
        return render_template('index.html')
 @app.route('/veiw')
 def veiw():
-   with open('attendance.csv') as f:
-       LIST = f.read()
-
-   return  render_template('view.html',LIST=LIST)
+    nameList = []
+    entryList = []
+    with open('attendance.csv', 'r+') as f:
+        myDataList = f.readlines()
+        for line in myDataList:
+            entry = line.split(',')
+           # nameList.append(entry[0])
+            entryList.append(entry)
+            print(entryList)
+    return  render_template('view.html',names =entryList)
 
 if __name__ == '__main__':
    app.run()

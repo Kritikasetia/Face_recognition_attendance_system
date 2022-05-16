@@ -1,0 +1,13 @@
+    <!doctype html>
+    <html lang="en">
+
+
+    <body>
+   {% for entryList in names %}
+     <li>{% for element in entryList %}
+      {{element}} ||
+    {% endfor %}</li>
+    {% endfor %}
+
+    </body>
+    </html>
