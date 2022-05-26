@@ -8,7 +8,7 @@ from datetime import datetime
 
 # initiate flask app
 app = Flask(__name__, template_folder='./templates')
-
+app = Flask(__name__, static_url_path='/static')
 camera = cv2.VideoCapture(0)
 
 global capture, rec_frame, switch, face, rec, out, student_name
@@ -62,7 +62,7 @@ def attendance(name):
             time_now = datetime.now()
             tStr = time_now.strftime('%H:%M:%S')
             dStr = time_now.strftime('%d/%m/%Y')
-            f.writelines(f'"\n"{name},{tStr},{dStr}')
+            f.writelines(f'\n{name},{tStr},{dStr}')
 
 
 def detect_face(frame):
@@ -120,7 +120,7 @@ def gen_frames():  # generate frame by frame from camera
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('home.html')
 
 
 @app.route('/video_feed')
@@ -168,12 +168,12 @@ def tasks():
 
 
     elif request.method == 'GET':
-        return render_template('index.html')
+        return render_template('Mark_Attendance.html')
     if student_name:
         print(student_name)
-        return render_template('index.html', student_name=student_name)
+        return render_template('Mark_Attendance.html', student_name=student_name)
     else:
-        return render_template('index.html')
+        return render_template('Mark_Attendance.html')
 
 
 class User:

@@ -39,7 +39,7 @@ def attendance(name):
             time_now=datetime.now()
             tStr = time_now.strftime('%H:%M:%S')
             dStr = time_now.strftime('%d/%m/%Y')
-            f.writelines(f'{name},{tStr},{dStr}')
+            f.writelines(f'"\n"{name},{tStr},{dStr}')
 cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
 
 while True:

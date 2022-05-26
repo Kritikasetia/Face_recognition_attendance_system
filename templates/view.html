@@ -1,13 +1,51 @@
-    <!doctype html>
-    <html lang="en">
+<!doctype html>
+<html lang="en">
+<head>
+<style>
+h1{
+margin:2%;
+text-align:center;
+color:hotpink;
+ font-family:cursive;}
 
 
+ table{
+border-collapse: collapse;
+margin:50px auto;
+font-size: 20px;
+ min-width:400px;
+ color:#ffffff;
+ border-radius:5px 5px 0 0;
+overflow:hidden;
+ box-shadow:0 0 20px rgba(0,0,0,0.15);
+}
+ tr{
+color:#000000;
+text-align:left;
+ font-weight:bold;
+}
+ td{
+padding:12px 15px;
+text-align:center;
+}
+ tr:nth-of-type(odd){
+background-color:	#89CFF0;
+}
+ tr:nth-of-type(even){
+ background-color:	#FFFFFF;
+ }
+</style>
+</head>
     <body>
+    <h1>View Attendance</h1>
+    <table>
+
    {% for entryList in names %}
-     <li>{% for element in entryList %}
-      {{element}} ||
-    {% endfor %}</li>
+      <tr>{% for element in entryList %}
+       <td>{{element}}
+    {% endfor %}</td></tr>
     {% endfor %}
+        </table>
 
     </body>
     </html>

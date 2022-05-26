@@ -40,34 +40,32 @@
                   <a class="nav-link" aria-current="page" href="#home">Home</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Mark Attendance</a>
+                  <a class="nav-link" href={{url_for('tasks')}}>Mark Attendance</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">View Attendance</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Login</a>
+                  <a class="nav-link" href={{url_for('login')}}>Login</a>
                 </li>
               </ul>
             </div>
           </div>
         </nav>
         <!-- Navbar -->
-      
+
         <!-- Background image -->
         <div
           class="p-5 text-center bg-image"
           style="
-            background-image: url('ig1.jpg');
+           background-image:url({{ url_for('static', filename='ig1.jpg') }});
             height: 400px;
           "
         >
+
           <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
             <div class="d-flex justify-content-center align-items-center h-100">
               <div class="text-white">
                 <h1 class="mb-3">Face-Recognition</h1>
                 <h4 class="mb-3">Attendance System</h4>
-                <a class="btn btn-outline-light btn-lg" href="#!" role="button"
+                <a class="btn btn-outline-light btn-lg" href={{url_for('tasks')}} role="button"
                 >Mark Attendance</a
                 >
               </div>
@@ -77,7 +75,7 @@
         <!-- Background image -->
       </header>
       <div>
-          
+
       </div>
       <!--content-->
       <section id="home">
@@ -98,25 +96,22 @@
             <i class="fas fa-gem me-3"></i>Company name
           </h6>
           <p>
-            Here you can use rows and columns to organize your footer content. Lorem ipsum
-            dolor sit amet, consectetur adipisicing elit.
+           xyz college
           </p>
         </div>
-        <!-- Grid column -->
-
         <!-- Grid column -->
         <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
           <!-- Links -->
           <h6 class="text-uppercase fw-bold mb-4">
             Contact
           </h6>
-          <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+          <p><i class="fas fa-home me-3"></i> abc,INDIA</p>
           <p>
             <i class="fas fa-envelope me-3"></i>
             info@example.com
           </p>
-          <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-          <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+          <p><i class="fas fa-phone me-3"></i>  234 567 88</p>
+          <p><i class="fas fa-print me-3"></i>  234 567 89</p>
         </div>
         <!-- Grid column -->
       </div>
@@ -125,10 +120,7 @@
   </section>
   <!-- Section: Links  -->
 </footer>
-<!-- Footer -->
-       <!-- <script src="import * as mdb from 'mdb-ui-kit'; // lib
-        import { Input } from 'mdb-ui-kit'; // module"></script>-->
-        <!-- MDB -->
+
 <script
 type="text/javascript"
 src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"
