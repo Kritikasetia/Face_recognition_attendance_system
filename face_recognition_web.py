@@ -1,21 +1,21 @@
-from flask import Flask, render_template, Response, request,session,redirect,url_for,g
+from flask import Flask, render_template, Response, request, session, redirect, url_for, g
 import cv2
-import datetime, time
-import os, sys
+from datetime import datetime
+import time
+import os
 import numpy as np
 import face_recognition
-from datetime import datetime
+import adminuser
 
 # initiate flask app
-app = Flask(__name__, template_folder='./templates')
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__, template_folder='./templates',  static_url_path='/static')
+
 camera = cv2.VideoCapture(0)
 
-global capture, rec_frame, switch, face, rec, out, student_name
+global capture, switch, face, student_name
 capture = 0
 face = 0
 switch = 1
-rec = 0
 
 path = 'images'
 images = []
@@ -29,7 +29,6 @@ for cu_img in myList:
     personName.append(os.path.splitext(cu_img)[0])
 print(personName)
 
-
 def faceEncodings(images):
     encodeList = []
     for img in images:
@@ -38,17 +37,8 @@ def faceEncodings(images):
         encodeList.append(encode)
     return encodeList
 
-
 encodeListknown = faceEncodings(images)
 print("All encodings complete")
-
-
-def record(out):
-    global rec_frame
-    while (rec):
-        time.sleep(0.05)
-        out.write(rec_frame)
-
 
 def attendance(name):
     with open('attendance.csv', 'a+') as f:
@@ -63,7 +53,6 @@ def attendance(name):
             tStr = time_now.strftime('%H:%M:%S')
             dStr = time_now.strftime('%d/%m/%Y')
             f.writelines(f'\n{name},{tStr},{dStr}')
-
 
 def detect_face(frame):
     faces = cv2.resize(frame, (0, 0), None, 0.25, 0.25)
@@ -87,9 +76,8 @@ def detect_face(frame):
         cv2.putText(frame, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
     return frame, name
 
-
 def gen_frames():  # generate frame by frame from camera
-    global out, capture, rec_frame, student_name
+    global  capture, student_name
     while True:
         success, frame = camera.read()
         if success:
@@ -101,9 +89,10 @@ def gen_frames():  # generate frame by frame from camera
             if (capture):
                 capture = 0
                 frame, name = detect_face(frame)
+                student_name = name
                 if name is not None and name != 'NO MATCH':
                     attendance(name)
-                    student_name = name
+
                 else:
                     print("Match not found")
             try:
@@ -117,16 +106,13 @@ def gen_frames():  # generate frame by frame from camera
         else:
             pass
 
-
 @app.route('/')
 def index():
     return render_template('home.html')
 
-
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
 @app.route('/requests', methods=['POST', 'GET'])
 def tasks():
@@ -137,15 +123,16 @@ def tasks():
         if request.form.get('click') == 'Capture':
             global capture
             capture = 1
-
+            while capture == 1:
+               time.sleep(1)
+            #return render_template('Mark_Attendance.html', student_name=student_name)
         elif request.form.get('face') == 'Face Only':
             global face
             face = not face
-            if (face):
+            if face:
                 time.sleep(4)
         elif request.form.get('stop') == 'Stop/Start':
-
-            if (switch == 1):
+            if switch == 1:
                 switch = 0
                 camera.release()
                 cv2.destroyAllWindows()
@@ -153,40 +140,19 @@ def tasks():
             else:
                 camera = cv2.VideoCapture(0)
                 switch = 1
-        elif request.form.get('rec') == 'Start/Stop Recording':
-            global rec, out
-            rec = not rec
-            if (rec):
-                now = datetime.datetime.now()
-                fourcc = cv2.VideoWriter_fourcc(*'XVID')
-                out = cv2.VideoWriter('vid_{}.avi'.format(str(now).replace(":", '')), fourcc, 20.0, (640, 480))
-                # Start new thread for recording the video
-                thread = Thread(target=record, args=[out, ])
-                thread.start()
-            elif (rec == False):
-                out.release()
-
-
+        #return render_template('Mark_Attendance.html')
+        if student_name:
+            print(student_name)
+            return render_template('Mark_Attendance.html', student_name=student_name)
+        else:
+            return render_template('Mark_Attendance.html')
     elif request.method == 'GET':
         return render_template('Mark_Attendance.html')
-    if student_name:
-        print(student_name)
-        return render_template('Mark_Attendance.html', student_name=student_name)
-    else:
-        return render_template('Mark_Attendance.html')
 
-
-class User:
-    def __init__(self,id,username,password):
-        self.id=id
-        self.username = username
-        self.password =password
-
-    def __repr__(self):
-        return f'<User: {self.username}>'
 app.secret_key = 'somesecretkeythatonlyishouldknow'
 users = []
-users.append(User(id=1, username='Admin', password='password'))
+users.append(adminuser.AdminUser(id=1, username='Admin', password='password'))
+
 def before_request():
     g.user = None
 
@@ -194,8 +160,8 @@ def before_request():
         user = [x for x in users if x.id == session['user_id']][0]
         g.user = user
 
-
 @app.route('/login', methods=['GET', 'POST'])
+
 def login():
     if request.method == 'POST':
         session.pop('user_id', None)
@@ -203,7 +169,11 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        user = [x for x in users if x.username == username][0]
+        matched_users = [x for x in users if x.username == username]
+        if len(matched_users) == 0:
+            return redirect(url_for('login'))
+
+        user = matched_users[0]
         if user and user.password == password:
             session['user_id'] = user.id
             return redirect(url_for('veiw'))
@@ -211,21 +181,19 @@ def login():
     return render_template('login.html')
     if not g.user:
         return redirect(url_for('login'))
+
 @app.route('/veiw')
+
 def veiw():
-    nameList = []
     entryList = []
     with open('attendance.csv', 'r+') as f:
         myDataList = f.readlines()
         for line in myDataList:
             entry = line.split(',')
-            # nameList.append(entry[0])
             entryList.append(entry)
             print(entryList)
 
     return render_template('view.html', names=entryList)
-
-
 
 if __name__ == '__main__':
     app.run()
