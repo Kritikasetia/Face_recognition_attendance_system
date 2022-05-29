@@ -15,7 +15,8 @@ For demo visit [here](https://youtu.be/4udEX259KXs)
 5. Run the docker image: `sudo docker run --rm  -d --name face_recognition_attendance_system --device /dev/video0 -p 5000:5000 face_recognition_attendance_system`
 6. Check the logs using: `sudo docker logs -f face_recognition_attendance_system`
 7. Once server is up, use this link to visit the webpage: http://127.0.0.1:5000/ and test the application.
-8. To stop the docker container run `sudo docker stop face_recognition_attendance_system`
+8. For Login, Username=Admin, Password=password.
+9. To stop the docker container run `sudo docker stop face_recognition_attendance_system`
 
 # Steps to run the application using venv
 1. Clone the repository using `git clone git clone https://github.com/Kritikasetia/Face_recognition_attendance_system.git`.
@@ -26,8 +27,10 @@ For demo visit [here](https://youtu.be/4udEX259KXs)
 6. Run `source venv/Scripts/activate` to activate the virtual environment on linux and just `venv/Scripts/activate` on windows.
 7. Run `python face_recognition_web.py` to start the application.
 8. Once server is up, use this link to visit the webpage: http://127.0.0.1:5000/ and test the application.
+9. For Login, Username=Admin, Password=password.
 
-Note: Running application using Docker is tested in Ubuntu 20.04. It may not work on windows or mac because of opencv not able to access laptop's camera when run inside docker container.
+Note: Running application using Docker is tested in Ubuntu 20.04. It may not work on windows or mac because of opencv not able to access laptop's camera when run
+inside docker container.
 
 Note: For any issue in installation of face_recognition library refer to the installtion section [here](https://virtualenv.pypa.io/en/legacy/index.html)
 
